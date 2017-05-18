@@ -181,3 +181,65 @@ double **sum_m(double **v1, double **v2, int size){
     }
     return result;
 }
+
+
+double *sub_v(double *v1, double *v2, int size){
+    double *result = allocate_vet_double(size);
+    
+    for (int i = 0; i < size; i++) {
+        result[i] = v1[i] - v2[i];
+    }
+    return result;
+}
+
+void zerar_vetor_double(double *v, int n){
+	int i;
+	for(i=0; i < n; i++){
+		v[i] = 0.0;
+	}
+}
+
+double det_ordem_inferior_a_4(double **m, int n){
+	int i;
+	int j;
+	double resultado = 0.0;
+	//a quantidade de diagonais nao eh proporcional
+	//entao nao deu pra arrumar uma formula que englobasse n=2 e n=3
+	if(n == 2){
+		double dp;
+		double ds;
+		dp = m[0][0]*m[1][1];
+		ds = m[0][1]*m[1][0];
+		return dp - ds;
+	}else{
+		double dp[n];
+		double ds[n];
+		
+		//inicializando os vetores
+		for(i = 0; i < n; i++){
+			dp[i] = 1.0;
+			ds[i] = 1.0;
+		}
+		
+		for(i = 0; i < n; i++){
+			
+			for(j = 0; j < n; j++){
+				//(i+j)%n eh pra dar a volta na matriz (sarrus)
+				dp[j] *= m[i][(i+j)%n];
+				ds[j] *= m[(n-1)-i][(i+j+1)%n];
+			}
+		}
+
+		for(i = 0; i < n; i++){
+			resultado += dp[i] - ds[i];
+		}
+		return resultado;
+	}
+}
+
+
+
+int isSingular(double **M){
+	//calcular o determinante
+	//se for 0, eh singular
+}

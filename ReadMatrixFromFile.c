@@ -11,7 +11,7 @@ void read_matrix_from_file(char *path_To_file, double ***M, double **b, int *mat
     myFile = fopen(path_To_file, "r");
 
     fscanf(myFile, "%d", matrix_order);
-    
+
     *M = malloc( *matrix_order * sizeof(double**));
     for (int i = 0; i < *matrix_order; i++) {
         (*M)[i] = malloc( *matrix_order * sizeof(double*));
