@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+#include <stdbool.h>
 
 void print_matrix( double **M, int size_column, int size_line){
     
@@ -237,8 +238,41 @@ double det_ordem_inferior_a_4(double **m, int n){
 	}
 }
 
+double **transpose(double **M, int order){
+    double **Mt = allocate_matrix_double(order, order);
+    
+    for (int i = 0; i < order; i++) {
+        for (int j = 0; j < order; j++) {
+            Mt[j][i]=M[i][j];
+        }
+    }
+    return Mt;
+}
 
+bool isIdentity(double **M, int order){
+    bool _isIdentity = true;
+    for (int i = 0; i < order; i++) {
+        for (int j = 0; j < order; j++) {
+            if(i == j){
+                if(M[i][j] != 1){
+                    _isIdentity = false;
+                }
+            }
+            else if(i != j){
+                if(M[i][j] != 0) {
+                    _isIdentity = false;
+                }
+            }
+        }
+    }
+    return _isIdentity;
+}
 
+bool isOrthogonal(double **M, int order){
+    double **Mt = transpose(M, order);
+    double **I = prod_matrix(M, Mt, order, order, order);
+    return isIdentity(I, order);
+}
 int isSingular(double **M){
 	//calcular o determinante
 	//se for 0, eh singular
