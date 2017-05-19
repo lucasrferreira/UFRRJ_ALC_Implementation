@@ -3,6 +3,10 @@
 #include <math.h>
 #include <stdbool.h>
 
+
+bool approximately(double v1, double v2, double precision){
+    return fabs((double) v1 -  (double) v2) < (double) precision;
+}
 void print_matrix( double **M, int size_column, int size_line){
     
     for (int i = 0; i < size_line; i++) {
@@ -273,7 +277,52 @@ bool isOrthogonal(double **M, int order){
     double **I = prod_matrix(M, Mt, order, order, order);
     return isIdentity(I, order);
 }
-int isSingular(double **M){
-	//calcular o determinante
-	//se for 0, eh singular
+
+int bandMatrixBandwidth(double **M, int order){
+    int n = 0;
+    int j = 0;
+    int i = 0;
+    bool should_break = false;
+    for (n = 0; n < order; n++) {
+        for (i = 0; i <= n; i++) {
+            j = (order - 1) - n + i;
+            if (M[i][j] != 0 || M[j][i] != 0){
+                should_break = true;
+            }
+            if(should_break)
+                break;
+        }
+        if(should_break)
+            break;
+    }
+    return order - 1 - n;
+}
+
+bool isTridiagonal(double **M,int order ){
+    int k = bandMatrixBandwidth(M, order);
+    if (k == 1){
+        return true;
+    }
+    else{
+        return false;
+    }
+}
+
+bool isHilbert(double **M, int order){
+    double hilbertValue = 0;
+    for (int i = 0; i < order; i++) {
+        for (int j = 0; j < order; j++) {
+            double denom = (double)i + 1 + (double)j + 1 - 1;
+            hilbertValue = (double)1/denom;
+            if(!approximately(M[i][j], hilbertValue , 0.001))
+                return false;
+        }
+    }
+    return true;
+}
+
+
+bool isSingular(double **M, int order){
+    double det = det_ordem_inferior_a_4(M, order);
+    return det == 0;
 }

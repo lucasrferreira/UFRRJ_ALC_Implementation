@@ -17,7 +17,9 @@ int main(){
     
     // double **Mt = transpose(M, size_order);
     // print_matrix(Mt, size_order, size_order);
-    bool x = isOrthogonal(M, size_order);
+    // bool x = isOrthogonal(M, size_order);
+    bool x = isSingular(M, size_order);
+    
     printf("%s", x ? "true" : "false");
 
     
