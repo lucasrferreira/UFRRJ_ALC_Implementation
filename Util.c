@@ -334,13 +334,33 @@ double *forward_substitution(double **L, double *b, int order){
 	int j;
 	double soma;
 	
-	x[0] = b[0];
+	x[0] = b[0]/L[0][0];
 	for(i=1; i < order; i++){
 		soma = 0.0;
 		for(j=0; j < i; j++){
 			soma += L[i][j] * x[j];
 		}
 		x[i] = (b[i] - soma)/L[i][i];
+	}
+	
+	return x;
+}
+
+
+double *back_substitution(double **U, double *b, int order){
+	double *x = allocate_vet_double(order);
+	int i;
+	int j;
+	int n = order;
+	double soma;
+	
+	x[n-1] = b[n-1]/U[n-1][n-1];
+	for(i=n-2; i >= 0; i--){
+		soma = 0.0;
+		for(j=i+1; j < n; j++){
+			soma += U[i][j] * x[j];
+		}
+		x[i] = (b[i] - soma)/U[i][i];
 	}
 	
 	return x;
