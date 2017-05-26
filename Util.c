@@ -326,3 +326,54 @@ bool isSingular(double **M, int order){
     double det = det_ordem_inferior_a_4(M, order);
     return det == 0;
 }
+
+//Se a diagonal da matriz nao for unitaria, transforma em unitaria
+void unit_diagonal_transform(double **L, double *b, int order){
+	int i;
+	int j;
+	double aux;
+	
+	for(i=0; i < order; i++){
+		if(L[i][i] != 1){
+			aux = L[i][i];
+			for(j = 0; j< order; j++){
+				L[i][j] = L[i][j]/aux;
+			}
+			b[i] = b[i]/aux;
+		}
+	}
+}
+
+double *forward_substitution(double **L, double *b, int order){
+	double *x = allocate_vet_double(order);
+	int i;
+	int j;
+	double soma;
+	
+	//verficando se a diagonal principal eh unitaria
+	//e transformando, caso nao seja
+	unit_diagonal_transform(L,b,order);
+	x[0] = b[0];
+	for(i=1; i < order; i++){
+		soma = 0.0;
+		for(j=0; j < i; j++){
+			soma += L[i][j] * x[j];
+		}
+		x[i] = b[i] - soma;
+	}
+	
+	return x;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
