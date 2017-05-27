@@ -328,6 +328,8 @@ bool isSingular(double **M, int order){
 }
 
 
+
+
 double *forward_substitution(double **L, double *b, int order){
 	double *x = allocate_vet_double(order);
 	int i;
@@ -364,5 +366,36 @@ double *back_substitution(double **U, double *b, int order){
 	}
 	
 	return x;
+}
+
+bool is_correct(double **M, double *b, double *x, double erro_maximo, int order){
+	double *Mx;
+	double erro;
+	Mx = prod_matrix_vector(M,x,order,order); 
+	
+	// erro = || b-Mx || norma 2
+	erro = normv(2, sub_v(b,Mx,order) ,order);
+
+	if(erro <= erro_maximo){
+		return true;
+	}else{
+		return false;
+	}
+}
+
+bool main_diagonal_has_zeros(double **A, int order){
+	int i;
+	for(i = 0; i < order; i++){
+		if(A[i][i] == 0.0)
+			return true;
+	}
+	return false;
+}
+
+void *clone_vector(double *v1, double *v2, int order){
+	int i;
+	for(i = 0; i < order; i++){
+		v1[i] = v2[i];
+	}
 }
 
