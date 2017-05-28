@@ -118,7 +118,7 @@ double normm(int norm_id, double **M, int matrix_order)
         for (int i = 0; i < matrix_order; i++) {
             double atual_norm = 0;
             for (int j = 0; j < matrix_order; j++) {
-                atual_norm += abs(M[i][j]);
+                atual_norm += fabs(M[i][j]);
             }
             
             if(atual_max_norm < atual_norm)
@@ -134,7 +134,7 @@ double normm(int norm_id, double **M, int matrix_order)
         for (int i = 0; i < matrix_order; i++) {
             double atual_norm = 0;
             for (int j = 0; j < matrix_order; j++) {
-                atual_norm += abs(M[j][i]);
+                atual_norm += fabs(M[j][i]);
             }
             
             if(atual_max_norm < atual_norm)
@@ -150,16 +150,17 @@ double normv(int norm_order, double *v, int vet_order)
 {
     double sum_res = 0;
     for (int i = 0; i < vet_order; i++) {
-        sum_res += pow(abs(v[i]), norm_order);
+        sum_res += pow(fabs(v[i]), norm_order);
     }
+    
     return pow(sum_res, 1.0/norm_order);
-
 }
+
 double normv_max(double *v, int vet_order)
 {
     double sum_res = 0;
     for (int i = 0; i < vet_order; i++) {
-        double temp = abs(v[i]);
+        double temp = fabs(v[i]);
         if(temp > sum_res)
             sum_res = temp;
         
@@ -375,7 +376,7 @@ bool is_correct(double **M, double *b, double *x, double erro_maximo, int order)
 	
 	// erro = || b-Mx || norma 2
 	erro = normv(2, sub_v(b,Mx,order) ,order);
-
+	
 	if(erro <= erro_maximo){
 		return true;
 	}else{
