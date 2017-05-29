@@ -400,3 +400,38 @@ void *clone_vector(double *v1, double *v2, int order){
 	}
 }
 
+bool criterio_linhas(double **A, int order){
+	int i;
+	int j;
+	double soma_linha;
+	for(i=0; i < order; i++){
+		soma_linha = 0;
+		for(j=0; j < order; j++){
+			if(i != j){
+				soma_linha += fabs(A[i][j]);
+			}
+		}
+		if(fabs(A[i][i]) <= soma_linha){
+			return false;
+		}
+	}
+	return true;
+}
+
+bool criterio_colunas(double **A, int order){
+	int i;
+	int j;
+	double soma_coluna;
+	for(j=0; j < order; j++){
+		soma_coluna = 0;
+		for(i=0; i < order; i++){
+			if(i != j){
+				soma_coluna += fabs(A[i][j]);
+			}
+		}
+		if(fabs(A[j][j]) <= soma_coluna){
+			return false;
+		}
+	}
+	return true;
+}
