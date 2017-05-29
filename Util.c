@@ -418,6 +418,7 @@ bool criterio_linhas(double **A, int order){
 	return true;
 }
 
+
 bool criterio_colunas(double **A, int order){
 	int i;
 	int j;
@@ -434,4 +435,48 @@ bool criterio_colunas(double **A, int order){
 		}
 	}
 	return true;
+}
+
+//preenche o vetor com 1
+void fill_double_vector_1(double *v, int n){
+	int i;
+	for(i=0; i < n; i++){
+		v[i] = 1.0;
+	}
+}
+
+double max_value(double *v, int order){
+	double max = v[0];
+	int i;
+	
+	//ta redundante, mas pelo menos nao tem indexOutOfBound
+	for(i = 0; i < order; i++){
+		if(v[i] > max){
+			max = v[i];
+		}
+	}
+	return max;
+}
+
+bool sassenfeld(double **A, int order){
+	int i;
+	int j;
+	double soma_linha;
+	double *beta;
+	beta = allocate_vet_double(order);
+	
+	//preenche o vetor dos betas com 1
+	fill_double_vector_1(beta, order);
+	
+	for(i=0; i < order; i++){
+		soma_linha = 0;
+		for(j=0; j < order; j++){
+			if(i != j){
+				soma_linha += fabs( A[i][j] * beta[j]);
+			}
+		}
+		beta [i] = soma_linha/fabs(A[i][i]);
+	}
+	
+	return max_value(beta, order) < 1;
 }
