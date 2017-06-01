@@ -322,7 +322,7 @@ bool isHilbert(double **M, int order){
     return true;
 }
 
-
+//TODO: fazer para ordem > 3
 bool isSingular(double **M, int order){
     double det = det_ordem_inferior_a_4(M, order);
     return det == 0;
@@ -393,10 +393,21 @@ bool main_diagonal_has_zeros(double **A, int order){
 	return false;
 }
 
-void *clone_vector(double *v1, double *v2, int order){
+void clone_vector(double *v1, double *v2, int order){
 	int i;
 	for(i = 0; i < order; i++){
 		v1[i] = v2[i];
+	}
+}
+
+//M1 = M2
+void clone_matrix(double **M1, double **M2, int order){
+	int i;
+	int j;
+	for(i = 0; i < order; i++){
+		for(j = 0; j < order; j++){
+			M1[i][j] = M2[i][j];
+		}
 	}
 }
 
@@ -449,7 +460,7 @@ double max_value(double *v, int order){
 	double max = v[0];
 	int i;
 	
-	//ta redundante, mas pelo menos nao tem indexOutOfBound
+	//ta redundante, mas pelo menos nao tem indexOutOfBound (caso order == 1)
 	for(i = 0; i < order; i++){
 		if(v[i] > max){
 			max = v[i];
@@ -479,4 +490,19 @@ bool sassenfeld(double **A, int order){
 	}
 	
 	return max_value(beta, order) < 1;
+}
+
+void generate_identity(double **M, int order){
+	int i;
+	int j;
+	
+	for(i = 0; i < order; i++){
+		for(j = 0; j < order; j++){
+			if(i == j){
+				M[i][j] = 1;
+			}else{
+				M[i][j] = 0;
+			}
+		}
+	}
 }
