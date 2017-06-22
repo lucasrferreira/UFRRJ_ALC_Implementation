@@ -19,11 +19,17 @@ int main(){
     
     // double **Mt = transpose(M, size_order);
     
-    bool x = is_pos_definite_chol(M, size_order);
-    printf("%s \n\n", x ? "true" : "false");
+    double **invert = invert_matrix_n(M, size_order);
+    print_matrix(invert, size_order, size_order);
+    double c_num0 = condition_number(0,M,size_order);
+    double c_num1 = condition_number(1,M,size_order);
+    double c_num2 = condition_number(2,M,size_order);
+    printf("\n0: %lf\n 1: %lf\n 2: %lf\n ",c_num0, c_num1, c_num2 );
+    // bool x = is_pos_definite_chol(M, size_order);
+    // printf("%s \n\n", x ? "true" : "false");
 
-    double **L = chol_fatoration(M, size_order);
-    print_matrix(L, size_order, size_order);
+    // double **L = chol_fatoration(M, size_order);
+    // print_matrix(L, size_order, size_order);
     
     // printf("\n\n %lf \n", normm(0, M, size_order));
     // printf("\n\n %lf \n", normm(1, M, size_order));

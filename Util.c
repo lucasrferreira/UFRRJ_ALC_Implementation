@@ -81,6 +81,17 @@ void free_matrix_double(double **board, int Rows)
     free(board);
  }
 
+double **prod_matrix_scalar(double **A, double b, int A_column_size,  int line_size){
+    double **M = allocate_matrix_double(line_size, A_column_size);
+    double value = 0;
+    for (int i = 0; i < A_column_size; i++) {
+        for (int j = 0; j < line_size; j++) {
+            M[i][j] = A[i][j] * b;   
+        }
+    }
+    return M;
+}
+
 double *prod_matrix_vector(double **A, double *b, int A_column_size,  int line_size){
     double *M = allocate_vet_double(line_size);
     
@@ -211,6 +222,73 @@ void zerar_vetor_double(double *v, int n){
 	for(i=0; i < n; i++){
 		v[i] = 0.0;
 	}
+}
+
+double determinant_order_n(double **a,int n)
+{
+   int i,j,j1,j2;
+   double det = 0;
+   double **m = NULL;
+
+   if (n < 1) { /* Error */
+
+   } else if (n == 1) { /* Shouldn't get used */
+      det = a[0][0];
+   } else if (n == 2) {
+      det = a[0][0] * a[1][1] - a[1][0] * a[0][1];
+   } else {
+      det = 0;
+      for (j1=0;j1<n;j1++) {
+         m = allocate_matrix_double(n,n);
+         for (i=1;i<n;i++) {
+            j2 = 0;
+            for (j=0;j<n;j++) {
+               if (j == j1)
+                  continue;
+               m[i-1][j2] = a[i][j];
+               j2++;
+            }
+         }
+         det += pow(-1.0,j1+2.0) * a[0][j1] * determinant_order_n(m,n-1);
+         for (i=0;i<n-1;i++)
+            free(m[i]);
+         free(m);
+      }
+   }
+   return(det);
+}
+
+double **coFactor(double **a,int n)
+{
+    int i,j,ii,jj,i1,j1;
+    double det;
+    double **c;
+    double **b = allocate_matrix_double(n,n);
+    c = allocate_matrix_double(n,n);
+    for (j=0;j<n;j++) {
+        for (i=0;i<n;i++) {
+            /* Form the adjoint a_ij */
+            i1 = 0;
+            for (ii=0;ii<n;ii++) {
+                if (ii == i)
+                    continue;
+                j1 = 0;
+                for (jj=0;jj<n;jj++) {
+                    if (jj == j)
+                        continue;
+                    c[i1][j1] = a[ii][jj];
+                    j1++;
+                }
+                i1++;
+            }   
+            /* Calculate the determinate */
+            det = determinant_order_n(c,n-1);
+            /* Fill in the elements of the cofactor */
+            b[i][j] = pow(-1.0,i+j+2.0) * det;
+        }
+    }
+    free_matrix_double(c,n);
+    return b;
 }
 
 double det_ordem_inferior_a_4(double **m, int n){
@@ -513,4 +591,24 @@ void generate_identity(double **M, int order){
 			}
 		}
 	}
+}
+
+
+double **invert_matrix_n(double **m, int n){
+    double idet = 1/determinant_order_n(m,n);
+    double **cofac = coFactor(m,n);
+    double **adj = transpose(cofac,n);
+    free_matrix_double(cofac,n);
+    
+    double **inverse = prod_matrix_scalar(adj, idet, n, n);
+    free_matrix_double(adj,n);
+    return inverse;
+}
+
+double condition_number(int norm_id, double **M, int matrix_order)
+{
+    double **iM = invert_matrix_n(M,matrix_order);
+    double c_num = normm(norm_id,M,matrix_order) * normm(norm_id,iM,matrix_order);
+    free_matrix_double(iM,matrix_order);
+    return c_num;
 }
