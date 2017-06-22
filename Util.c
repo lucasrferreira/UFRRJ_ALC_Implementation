@@ -23,6 +23,14 @@ void print_vector( double *v , int size) {
     }
 }
 
+void copy_matrix(double **M_to, double **M_from, int order){
+    for (int i = 0; i < order; i++) {
+        for (int j = 0; j < order; j++) {
+            M_to[i][j] = M_from[i][j];
+        }
+    }
+}
+
 double **allocate_matrix_double(int Rows, int Cols)
 {    
     // allocate Rows rows, each row is a pointer to int
