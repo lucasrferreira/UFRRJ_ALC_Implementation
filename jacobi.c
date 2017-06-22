@@ -45,11 +45,11 @@ double *jacobi_method(double **M, double*b, int order, double erro_maximo){
 		
 		tempo_atual = clock();
 		
-		//Calcula o tempo de execução do programa em segundos
+		//Calcula o tempo de execuï¿½ï¿½o do programa em segundos
 		tempo_corrido = (tempo_atual - tempo_inicial)/CLOCKS_PER_SEC;
 		convergiu = is_correct(M, b, x, erro_maximo, order);
 		clone_vector(x_anterior, x, order);
 	}
-	
+	free(x_anterior);
     return x;
 }
