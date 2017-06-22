@@ -4,6 +4,7 @@
 
 #include "Util.c"
 #include "Cholesky.c"
+#include "LU.c"
 #include "ReadMatrixFromFile.c"
 
 
@@ -24,7 +25,8 @@ int main(){
     double c_num0 = condition_number(0,M,size_order);
     double c_num1 = condition_number(1,M,size_order);
     double c_num2 = condition_number(2,M,size_order);
-    printf("\n0: %lf\n 1: %lf\n 2: %lf\n ",c_num0, c_num1, c_num2 );
+    double c_num3 = condition_number_est(M ,size_order);
+    printf("\n0: %lf\n 1: %lf\n 2: %lf\n est: %lf\n ",c_num0, c_num1, c_num2, c_num3 );
     // bool x = is_pos_definite_chol(M, size_order);
     // printf("%s \n\n", x ? "true" : "false");
 

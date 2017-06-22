@@ -119,6 +119,7 @@ double *prod_vector_matrix(double *b, double **A, int column_size,  int A_line_s
     return M;
 }
 
+//norm_id = 0 for frobenius, 1 for norm-1 and 2 for infinite, 
 double normm(int norm_id, double **M, int matrix_order)
 {
     if(norm_id == 0) //frobenius
@@ -131,7 +132,7 @@ double normm(int norm_id, double **M, int matrix_order)
         }
         return sqrt(sum_res);
     }
-    else if(norm_id == 1) //line
+    else if(norm_id == 2) //infinite
     {
         double atual_max_norm = 0;
         for (int i = 0; i < matrix_order; i++) {
@@ -147,7 +148,7 @@ double normm(int norm_id, double **M, int matrix_order)
         }
         return atual_max_norm;
     }
-    else if(norm_id == 2) //column
+    else if(norm_id == 1) //norm 1
     {
         double atual_max_norm = 0;
         for (int i = 0; i < matrix_order; i++) {
@@ -410,7 +411,7 @@ bool isHilbert(double **M, int order){
 
 //TODO: fazer para ordem > 3
 bool isSingular(double **M, int order){
-    double det = det_ordem_inferior_a_4(M, order);
+    double det = determinant_order_n(M, order);
     return det == 0;
 }
 
