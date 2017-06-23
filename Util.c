@@ -498,6 +498,27 @@ void clone_matrix(double **M1, double **M2, int order){
 	}
 }
 
+bool criterio_norma(double **M, int order){
+    double **auxB = allocate_matrix_double(order, order);
+    double **B = prod_matrix_scalar(auxB,0,order,order);
+    free_matrix_double(auxB, order);
+    
+    for(int i=0; i < order; i++){
+        for(int j=0; j < order; j++){
+            if(i!=j)  
+                B[i][j] = -M[i][j]/M[i][i];
+        }
+    }
+    
+    print_matrix(B, order, order);
+    //satisfaz se alguma norma for menor que 1 
+    bool satisfy = false;
+    for (int i = 0; i < 3; i++) {
+        satisfy = (normm(i, B, order) < 1) || satisfy;
+    }
+    return satisfy;
+}
+
 bool criterio_linhas(double **A, int order){
 	int i;
 	int j;
