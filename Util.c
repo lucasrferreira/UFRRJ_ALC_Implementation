@@ -3,6 +3,7 @@
 #include <math.h>
 #include <stdbool.h>
 
+#define MIN 0.0001
 
 bool approximately(double v1, double v2, double precision){
     return fabs((double) v1 -  (double) v2) < (double) precision;
@@ -480,6 +481,7 @@ bool main_diagonal_has_zeros(double **A, int order){
 	return false;
 }
 
+//v1 = v2
 void clone_vector(double *v1, double *v2, int order){
 	int i;
 	for(i = 0; i < order; i++){
@@ -633,4 +635,28 @@ double condition_number(int norm_id, double **M, int matrix_order)
     double c_num = normm(norm_id,M,matrix_order) * normm(norm_id,iM,matrix_order);
     free_matrix_double(iM,matrix_order);
     return c_num;
+}
+
+bool is_linearmente_independentes(double **M, int order){
+	double det = determinant_order_n(M,order);
+	//MIN eh aproximadamente 0
+	return fabs(det)  > MIN;
+}
+
+double *prod_vector_scalar(double *v, double scalar, int order){
+	int i;
+	double *result = allocate_vet_double(order);
+	for(i=0; i < order; i++){
+		result[i] = v[i]*scalar;
+	}
+	return result;
+}
+
+double scalar_prod(double *v1, double *v2, int order){
+	int i;
+	double result = 0;
+	for(i = 0; i < order; i++){
+		result += v1[i] * v2[i];
+	}
+	return result;
 }
