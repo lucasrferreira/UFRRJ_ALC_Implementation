@@ -3,6 +3,7 @@
 #include <math.h>
 #include <stdbool.h>
 
+#define PI 3.14159265358979323846
 #define MIN 0.0001
 
 bool approximately(double v1, double v2, double precision){
@@ -659,4 +660,66 @@ double scalar_prod(double *v1, double *v2, int order){
 		result += v1[i] * v2[i];
 	}
 	return result;
+}
+
+double angle_between_vec(double *v1, double *v2, int order){
+	double cos_theta;
+	cos_theta = scalar_prod(v1,v2,order) / ( normv(2,v1,order) * normv(2,v2,order) );
+	// *180/PI -> conversao de rad para graus
+	return (acos(cos_theta)*180)/PI;
+}
+
+void max_angle_between_vec(double **M, int order){
+	double cos_phi;
+	int i,j;
+	int *vi;
+	int *vj;
+	int cont = 0;
+	int tam_vect = order;
+	double angle;
+	double max_angle = -1.0;
+	double **X = transpose(M,order);
+	
+	//alocacao inicial dos pares de colunas com maior angulo
+	vi = (int *)malloc(tam_vect * sizeof(int));
+	vj = (int *)malloc(tam_vect * sizeof(int));
+	
+	for(i=0; i<order-1; i++){
+		
+		for(j=i+1; j<order; j++){
+			angle = angle_between_vec(X[i],X[j],order);
+			if(angle > max_angle){
+				max_angle = angle;
+				//se encontrou um angulo maior, recomecar a lista de pares
+				vi[0] = i;
+				vj[0] = j;
+				cont = 1;
+			}else if(angle == max_angle){
+				//adicionar par a lista
+				if(cont >= tam_vect){
+					//alocar mais memoria
+					tam_vect++;
+					vi = (int *)realloc(vi, tam_vect * sizeof(int));
+					vj = (int *)realloc(vj, tam_vect * sizeof(int));
+				}
+				
+				vi[cont] = i;
+				vj[cont] = j;
+				cont++;
+			}
+		}
+	}
+	
+	printf("Pares de colunas que formam o maior angulo:");
+	for(i = 0; i < cont; i++){
+		printf("\nColunas %d e %d\n", vi[i], vj[i]);
+		print_vector(X[vi[i]], order);
+		printf("\n");
+		print_vector(X[vj[i]], order);
+	}
+	
+	printf("\nMaior angulo: %lf", max_angle);
+	free(X);
+	free(vi);
+	free(vj);
 }
