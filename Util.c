@@ -723,3 +723,41 @@ void max_angle_between_vec(double **M, int order){
 	free(vi);
 	free(vj);
 }
+
+bool is_pos_definite(double **A, int order){
+    
+    double **L = allocate_matrix_double(order, order);
+    copy_matrix(L,A,order);
+    int n = order;
+    for (int i = 0; i < n; i++){
+        for (int j = 0; j < (i+1); j++) {
+            double s = 0;
+            for (int k = 0; k < j; k++)
+                s += L[i][k] * L[j][k];
+                
+            if(i == j){
+                double sum = A[j][j] - s;
+                if (sum <= 0){ 
+                    return false;
+                }
+                L[j][j] = sqrt(sum); 
+            }else{
+                L[i][j] = (A[i][j] - s) / L[j][j];
+                L[j][i] = 0;
+                
+            }
+            
+        }
+    }
+    return true;
+}
+
+double solution_distance(double **M, double *b, double *x, int order){
+	double *Mx;
+	double erro;
+	Mx = prod_matrix_vector(M,x,order,order); 
+	
+	// erro = || b-Mx || norma 2
+	erro = normv(2, sub_v(b,Mx,order) ,order);
+	return erro;
+}

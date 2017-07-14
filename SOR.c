@@ -40,7 +40,7 @@ double *SOR_method(double **M, double*b, int order, double w, double erro_maximo
 			x[i] = (1-w) * x[i] + w * ((b[i] - soma)/M[i][i]);
 		}
 		tempo_atual = clock();
-		//Calcula o tempo de execu��o do programa em segundos
+		//Calcula o tempo de execucao do programa em segundos
 		tempo_corrido = (tempo_atual - tempo_inicial)/CLOCKS_PER_SEC;
 
 		convergiu = is_correct(M, b, x, erro_maximo, order);
