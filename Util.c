@@ -253,7 +253,7 @@ double determinant_order_n(double **a,int n)
             }
          }
          det += pow(-1.0,j1+2.0) * a[0][j1] * determinant_order_n(m,n-1);
-         for (i=0;i<n-1;i++)
+         for (i=0;i<n;i++)
             free(m[i]);
          free(m);
       }
@@ -460,11 +460,16 @@ double *back_substitution(double **U, double *b, int order){
 
 bool is_correct(double **M, double *b, double *x, double erro_maximo, int order){
 	double *Mx;
+	double *diff;
 	double erro;
 	Mx = prod_matrix_vector(M,x,order,order); 
 	
 	// erro = || b-Mx || norma 2
-	erro = normv(2, sub_v(b,Mx,order) ,order);
+	diff = sub_v(b,Mx,order);
+	erro = normv(2, diff ,order);
+	
+	free(Mx);
+	free(diff);
 	
 	if(erro <= erro_maximo){
 		return true;
@@ -754,10 +759,15 @@ bool is_pos_definite(double **A, int order){
 
 double solution_distance(double **M, double *b, double *x, int order){
 	double *Mx;
+	double *diff;
 	double erro;
 	Mx = prod_matrix_vector(M,x,order,order); 
 	
 	// erro = || b-Mx || norma 2
-	erro = normv(2, sub_v(b,Mx,order) ,order);
+	//erro = normv(2, sub_v(b,Mx,order) ,order);
+	diff = sub_v(b,Mx,order);
+	erro = normv(2, diff ,order);
+	
+	free(Mx);
 	return erro;
 }

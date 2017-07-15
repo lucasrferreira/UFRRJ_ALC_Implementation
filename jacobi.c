@@ -20,8 +20,10 @@ double *jacobi_method(double **M, double*b, int order, double erro_maximo){
     x_anterior = allocate_vet_double(order);
     
 	if(main_diagonal_has_zeros(M,order)){
-		printf("Os elementos da diagonal principal devem ser diferentes de zero");
-		exit(1);
+		printf("Os elementos da diagonal principal devem ser diferentes de zero\n");
+		free(x_anterior);
+		free(x);
+		return NULL;
 	}
 	
 	//valores iniciais para x = (0, ... ,0)
@@ -51,5 +53,9 @@ double *jacobi_method(double **M, double*b, int order, double erro_maximo){
 		clone_vector(x_anterior, x, order);
 	}
 	free(x_anterior);
+	if(!convergiu){
+		free(x);
+		return NULL;
+	}
     return x;
 }

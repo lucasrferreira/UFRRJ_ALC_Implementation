@@ -18,8 +18,9 @@ double *SOR_method(double **M, double*b, int order, double w, double erro_maximo
     x = allocate_vet_double(order);
     
 	if(main_diagonal_has_zeros(M,order)){
-		printf("Os elementos da diagonal principal devem ser diferentes de zero");
-		exit(1);
+		printf("Os elementos da diagonal principal devem ser diferentes de zero\n");
+		free(x);
+		return NULL;
 	}
 
 	zerar_vetor_double(x, order);
@@ -44,6 +45,11 @@ double *SOR_method(double **M, double*b, int order, double w, double erro_maximo
 		tempo_corrido = (tempo_atual - tempo_inicial)/CLOCKS_PER_SEC;
 
 		convergiu = is_correct(M, b, x, erro_maximo, order);
+	}
+	
+	if(!convergiu){
+		free(x);
+		return NULL;
 	}
 	
     return x;
