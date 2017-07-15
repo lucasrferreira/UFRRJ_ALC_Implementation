@@ -7,6 +7,7 @@
 
 void ler_arquivo(char *path, double **P, double *xAnterior,int *t){
 	int i;
+	int j;
 	double valor;
 	FILE *myFile;
 	
@@ -19,16 +20,12 @@ void ler_arquivo(char *path, double **P, double *xAnterior,int *t){
     	xAnterior[i] = valor;
 	}
     
-	fscanf(myFile, "%lf", &P[0][0]);//ps
-    fscanf(myFile, "%lf", &P[1][0]);//qs
-    fscanf(myFile, "%lf", &P[1][1]);//pn
-    fscanf(myFile, "%lf", &P[2][1]);//qn
-    fscanf(myFile, "%lf", &P[2][2]);//py
-    fscanf(myFile, "%lf", &P[3][2]);//qy
-    fscanf(myFile, "%lf", &P[0][2]);//fy
-    fscanf(myFile, "%lf", &P[3][3]);//pa
-    fscanf(myFile, "%lf", &P[0][3]);//fa
-    
+	for(i=0; i<4; i++){
+		for(j=0; j<4; j++){
+			fscanf(myFile, "%lf", &P[i][j]);
+		}
+	}
+
     fclose(myFile);
 }
 
