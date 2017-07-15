@@ -19,7 +19,7 @@ int main(){
     double *b;
     int size_order;
 
-    read_matrix_from_file("input_files/matrix.in", &M, &b, &size_order);
+    read_matrix_from_file("input_files/A1B1.txt", &M, &b, &size_order);
     
     printf("Propriedades da matriz: (a)\n");
 	printf("Positiva Definida: ");

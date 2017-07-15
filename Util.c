@@ -227,6 +227,45 @@ void zerar_vetor_double(double *v, int n){
 	}
 }
 
+
+double determinant_order_n_inner(double **a, int n)
+{
+   int i,j,j1,j2;
+   double det = 0;
+   double **m;
+
+   if (n < 1) { /* Error */
+
+   } else if (n == 1) { /* Shouldn't get used */
+      det = a[0][0];
+   } else if (n == 2) {
+      det = a[0][0] * a[1][1] - a[1][0] * a[0][1];
+      free_matrix_double(a, n);
+   } else {
+      det = 0;
+      for (j1=0;j1<n;j1++) {
+        m = allocate_matrix_double(n - 1,n - 1);
+        for (i=1;i<n;i++) {
+            j2 = 0;
+            for (j=0;j<n;j++) {
+                if (j == j1)
+                    continue;
+                m[i-1][j2] = a[i][j];
+                j2++;
+            }
+        }
+        det += pow(-1.0,j1+2.0) * a[0][j1];
+        int row;
+        for (row = 0; row < n; row++) {
+            free(a[row]);
+        }
+        free(a);
+        // free_matrix_double(a, n);
+        det += det * determinant_order_n_inner(m,n-1);
+        }
+   }
+   return(det);
+}
 double determinant_order_n(double **a,int n)
 {
    int i,j,j1,j2;
@@ -242,7 +281,7 @@ double determinant_order_n(double **a,int n)
    } else {
       det = 0;
       for (j1=0;j1<n;j1++) {
-         m = allocate_matrix_double(n,n);
+         m = allocate_matrix_double(n-1,n-1);
          for (i=1;i<n;i++) {
             j2 = 0;
             for (j=0;j<n;j++) {
@@ -253,13 +292,13 @@ double determinant_order_n(double **a,int n)
             }
          }
          det += pow(-1.0,j1+2.0) * a[0][j1] * determinant_order_n(m,n-1);
-         for (i=0;i<n-1;i++)
-            free(m[i]);
-         free(m);
+        free_matrix_double(m,n-1);
+          
       }
    }
    return(det);
 }
+
 
 double **coFactor(double **a,int n)
 {

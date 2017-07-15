@@ -8,20 +8,35 @@ void decompose(double **M, double*b, double **L, double **U, int order){
     int j;
     int k;
     double m;
-    generate_identity(L,order);
-	clone_matrix(U,M,order);
+    // generate_identity(L,order);
+// 	clone_matrix(U,M,order);
+    for (int i = 0; i < order; i++) {
+        for (int j = 0; j < order; j++) {
+            L[i][j] = 0;
+            U[i][j] = 0;
+        }
+    }
     
-    for(j = 0; j < order-1; j++){
-	
-    	for(i = j+1; i < order; i++){
-    		m = U[i][j]/U[j][j];
-    		L[i][j] = m;
-
-    		for(k = 0; k < order; k++){
-    			U[i][k] = U[i][k] - (U[j][k] * m);
-			}
-		}
-	}
+    for(i = 0; i < order; i++){
+    	for(j = 0; j < order; j++){
+    		if(i <= j)
+    		{
+    		    double sum = 0;
+    		    for (int k = 1; k < i; k++) {
+    		        sum += U[k][j] * L[i][k];
+    		    }
+    		    U[i][j] = M[i][j] - sum;
+    		}
+    		if(i >= j) 
+    		{
+    		    double sum = 0;
+    		    for (int k = 1; k < i; k++) {
+    		        sum += U[k][j] * L[i][k];
+    		    }
+    		    L[i][j] = (1/U[j][j]) * (M[i][j] - sum);
+    		}
+    	}
+    }
 }
 
 double *lu_decomposition(double **M, double*b, int order){
