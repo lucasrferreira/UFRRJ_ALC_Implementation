@@ -19,8 +19,9 @@ int main(){
     double *b;
     int size_order;
 
-    read_matrix_from_file("input_files/A1B1.txt", &M, &b, &size_order);
-    
+//    read_matrix_from_file("input_files/matrix.in", &M, &b, &size_order);
+	read_matrix_from_file("input_files/A2B2.txt", &M, &b, &size_order);
+
     printf("Propriedades da matriz: (a)\n");
 	printf("Positiva Definida: ");
 	if(is_pos_definite(M,size_order)){
@@ -117,23 +118,39 @@ int main(){
 	double *xGauss;
 	xGauss = gauss_seidel_method(M,b,size_order,MAX_ERROR);
 	printf("Por Gauss-Seidel:\n");
-	print_vector(xGauss,size_order);
-	printf("Distancia entre sol. aproximada e sol. do sistema: %lf\n", solution_distance(M,b,xGauss,size_order));
-	free(xGauss);
+	if(xGauss != NULL){
+		print_vector(xGauss,size_order);
+		printf("Distancia entre sol. aproximada e sol. do sistema: %lf\n", solution_distance(M,b,xGauss,size_order));
+		free(xGauss);
+	}else{
+		printf("Gauss-seidel nao convergiu\n");
+	}
+	
 	
 	double *xJacobi;
-	xJacobi = jacobi_method(M,b,size_order,MAX_ERROR);
 	printf("\nPor Jacobi:\n");
-	print_vector(xJacobi,size_order);
-	printf("Distancia entre sol. aproximada e sol. do sistema: %lf\n", solution_distance(M,b,xJacobi,size_order));
+	xJacobi = jacobi_method(M,b,size_order,MAX_ERROR);
+	if(xJacobi != NULL){
+		print_vector(xJacobi,size_order);
+		printf("Distancia entre sol. aproximada e sol. do sistema: %lf\n", solution_distance(M,b,xJacobi,size_order));
 	free(xJacobi);
+	}else{
+		printf("Jacobi nao convergiu\n");
+	}
+	
 	
 	double *xSOR;
-	xSOR = SOR_method(M,b,size_order,1.5,MAX_ERROR);
 	printf("\nPor SOR:\n");
-	print_vector(xSOR,size_order);
-	printf("Distancia entre sol. aproximada e sol. do sistema: %lf\n", solution_distance(M,b,xSOR,size_order));
-	free(xSOR);
+	xSOR = SOR_method(M,b,size_order,1.5,MAX_ERROR);
+	if(xSOR != NULL){
+		print_vector(xSOR,size_order);
+		printf("Distancia entre sol. aproximada e sol. do sistema: %lf\n", solution_distance(M,b,xSOR,size_order));
+		free(xSOR);
+	}else{
+		printf("SOR nao convergiu\n");
+	}
+	
+	
 	
 	printf("\nCholesky: (h)\n");
 	if(is_pos_definite(M,size_order)){

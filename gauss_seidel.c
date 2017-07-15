@@ -51,6 +51,9 @@ double *gauss_seidel_method(double **M, double*b, int order, double erro_maximo)
 
 		convergiu = is_correct(M, b, x, erro_maximo, order);
 	}
-	
+	if(!convergiu){
+		free(x);
+		return NULL;
+	}
     return x;
 }
