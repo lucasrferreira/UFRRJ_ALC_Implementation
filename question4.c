@@ -15,7 +15,7 @@ double *orthogonal_proj(double **V, double **U, int row, int order){
 	int i;
 	double scalar;
 	double *aux;
-	double *result = allocate_matrix_double(order,order);
+	double *result = allocate_vet_double(order);
 	
 	zerar_vetor_double(result, order);
 	//proj = (V[row] . U[i-1]) . U[i-1] + (V[row] . U[i-2]) . U[i-2] + ...
