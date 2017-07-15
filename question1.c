@@ -171,9 +171,6 @@ int main(){
 		free(xQR);
 	}
 	
-//   print_matrix(M,size_order,size_order);
-//   print_vector(b, size_order);
-//   print_vector(x, size_order);
 	free_matrix_double(M,size_order);
 	free(b);
     return 0;
